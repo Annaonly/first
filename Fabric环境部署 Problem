@@ -1,0 +1,73 @@
+1.wzc-2019@ubuntu:~/go/src/github.com/hyperledger$ git clone https://github.com/hyperledger/fabric.git
+正克隆到 'fabric'...
+fatal: unable to access 'https://github.com/hyperledger/fabric.git/': Could not resolve proxy: https
+
+1.如何配置git
+sudo vim /etc/hosts
+在末尾添加：
+
+151.101.113.194 github.global.ssl.fastly.net
+192.30.253.112 github.com
+52.216.227.168 github-cloud.s3.amazonaws.com
+最后：
+
+source /etc/hosts
+
+git config --global url.git://github.com/.insteadOf https://github.com/
+
+git config --global --unset http.proxy 
+git config --global --unset https.proxy
+
+and then restarting my term session and it works again
+
+2.如何解决阿里云sudo: unable to resolve host xxx
+虽然sudo 还是可以正常执行, 但是警告讯息每次都出来,而这只是机器在反解上的问题, 所以就直接从/etc/hosts 设定, 让abc(hostname) 可以解回127.0.0.1 的IP 即可.
+
+解决方法
+
+vi   /etc/hosts  第一行信息如下：
+        127.0.0.1       localhost
+​
+
+在127.0.0.1 localhost 后面加上主机名称(hostname) 即可, /etc/hosts 内容修改成如下:
+
+第一种方法：直接将hostname（abc）追加到后面
+
+127.0.0.1 localhost abc #要保证这个名字与 /etc/hostname中的主机名一致才有效
+
+第二种方法：可以分开写
+
+  127.0.0.1       localhost 
+  127.0.0.1       abc
+这样设完后, 使用sudo 就不会再有那个提示信息了。
+
+3.docker镜像有关问题
+如果失败了就可能手动删除docker。
+
+暂停运行的容器
+sudo docker stop $(sudo docker ps -aq)
+
+删除容器
+sudo docker rm $(sudo docker ps -aq)
+
+强制删除镜像——比较危险做法，需要重新下载
+docker rmi -f  $(docker images -q)
+4.指定安装nodejs版本
+npm install -g n
+
+n 8.15.0 stable 
+➜  caliper git:(master) n 8.15.0 stable 
+
+  installing : node-v8.15.0
+       mkdir : /usr/local/n/versions/node/8.15.0
+       fetch : https://nodejs.org/dist/v8.15.0/node-v8.15.0-linux-x64.tar.gz
+   installed : v8.15.0 (with npm 6.4.1)
+
+Note: the node command changed location and the old location may be remembered in your current shell.
+         old : /usr/bin/node
+         new : /usr/local/bin/node
+To reset the command location hash either start a new shell, or execute PATH="$PATH"
+vim /etc/profile
+
+
+source /etc/profile
