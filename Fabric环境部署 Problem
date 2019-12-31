@@ -58,9 +58,10 @@ vi   /etc/hosts  第一行信息如下：
 
 删除容器
         sudo docker rm $(sudo docker ps -aq)
-        docker rmi -f  $(docker images -q)
+        
 强制删除镜像——比较危险做法，需要重新下载
-
+        docker rmi -f  $(docker images -q)
+        
 下载太慢||bootstrap执行不动
 
 从fabric和fabric-ca官方release中下载二进制文件，选择相应的版本下载，此次选择的是 linux-amd64-1.4.4 版本
